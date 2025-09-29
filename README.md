@@ -1,2 +1,2 @@
 # aitrands
-my name is prahant dixit
+my name is prashant dixit
