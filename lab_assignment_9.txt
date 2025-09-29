@@ -1,0 +1,401 @@
+1. Create the following tables:
+#Table name: CLIENT_MASTER
+
+DROP DATABASE IF EXISTS lab;
+
+CREATE DATABASE IF NOT EXISTS lab;
+USE lab;
+
+CREATE TABLE CLIENT_MASTER (
+     CLIENTNO varchar(6) PRIMARY KEY CHECK (CLIENTNO like  'C_____') ,
+     clientname VARCHAR(20) NOT NULL,
+    city VARCHAR(15) ,
+    pincode numeric(8),
+	state varchar(15),
+    baldue numeric(10,2)
+);
+
+#Table_Name: PRODUCT_MASTER
+
+CREATE TABLE PRODUCT_MASTER (
+     PRODUCTNO varchar(6) PRIMARY KEY CHECK (PRODUCTNO like  'P_____') ,
+     Discription  VARCHAR(20) NOT NULL ,
+    PROFITPERCENT numeric(4,2) NOT NULL ,
+    UNITMEASURE varchar(10) not null ,
+	QTYONHAND numeric(8) not null,
+    REORDERLVL numeric(8) not null ,
+    SELLPRICE numeric(8,2) not null CHECK (SELLPRICE <> 0) ,
+    COSTPRICE numeric(8,2) not null CHECK (COSTPRICE <> 0)
+);
+
+#Table_Name: SALESMAN_MASTER
+
+CREATE TABLE SALESMAN_MASTER (
+     SALESMANNO varchar(6) PRIMARY KEY CHECK (SALESMANNO like  'S_____') ,
+     SALESMANNAME  VARCHAR(20) NOT NULL ,
+     ADDRESS1 varchar(30) NOT NULL ,
+	 ADDRESS2 varchar(30)  ,
+	 CITY  varchar(8) ,
+     PINCODE numeric(8) ,
+     STATE varchar(20),
+     SELLMT numeric(8,2) not null CHECK (SELLMT <> 0) ,
+     TGTTOGET numeric(6,2) not null CHECK (TGTTOGET <> 0),
+     YTDSALES numeric(6,2) NOT null,
+     REMARKS varchar(60) 
+ );
+
+#Table_Name: SALES_ORDER
+
+CREATE TABLE SALES_ORDER(
+	ORDERNO varchar(6) primary KEY CHECK(ORDERNO LIKE 'O_____'),
+    CLIENTNO varchar(6) ,
+    FOREIGN KEY (CLIENTNO) REFERENCES CLIENT_MASTER(CLIENTNO),
+    ORDERDATE date NOT NULL,
+    DELYDDR varchar(25),
+    SALESMANNO varchar(6) ,
+    foreign key(SALESMANNO) references SALESMAN_MASTER(SALESMANNO),
+    DELYTYPE CHAR(1),
+    BILLYN char(1),
+    DELYDATE date,
+    ORDERSTATUS varchar(10)
+	);
+
+#Table_Name: SALES_ORDER_DETAILS
+
+CREATE table SALES_ORDER_DETAILS(
+	ORDERNO varchar(6), 
+    foreign key(ORDERNO) references SALES_ORDER(ORDERNO),
+    PRODUCTNO varchar(6),
+    foreign key(PRODUCTNO) references PRODUCT_MASTER(PRODUCTNO),
+    QTYORDERED numeric(8),
+    QTYDISP numeric(8),
+    PRODUCTRATE numeric(10,2)
+
+	);
+    
+2. Insert the following data into their respective tables:
+
+#data for client_master
+
+
+INSERT INTO CLIENT_MASTER (CLIENTNO, clientname, city, pincode, state, baldue)
+VALUES 
+('C00001', 'John Doe', 'Mumbai', 400054, 'Maharashtra', 15000.00),
+('C00002', 'Amit Kumar', 'Mumbai', 400057, 'Maharashtra', 5000.00),
+('C00004', 'Ashwini Joshi','Bangalore','560001','Karnataka',0),
+('C00005', 'Hansel Colaco', 'Mumbai', '400060', 'Maharashtra', 2000),
+('C00006', 'Deepak Sharma', 'Mangalore', 560050, 'Karnataka', 0);
+
+
+#data for product_master
+
+INSERT INTO PRODUCT_MASTER (PRODUCTNO, Discription, PROFITPERCENT, UNITMEASURE, QTYONHAND, REORDERLVL,SELLPRICE,COSTPRICE)
+VALUES
+('P00001', 'T-Shirts', '5 ', 'Piece', 200, 50, 350, 250),
+('P03453', 'Shirts', '6 ', 'Piece', 150, 50, 500, 350),
+('P06734', 'Cotton Jeans', '5 ', 'Piece', 100, 20, 600, 450),
+('P07865', 'Jeans', '5', 'Piece', 100, 20, 750, 500),
+('P07868', 'Trousers', '2', 'Piece', 150, 50, 850, 550),
+('P07885', 'Pull Overs', '2.5', 'Piece', 80, 30, 700, 450),
+('P07965', 'Denim Shirts', '4', 'Piece', 100, 40, 350, 250),
+('P07975', 'Lycra Tops', '5', 'Piece', 70, 30, 300, 250),
+('P08885', 'Skirts', '5', 'Piece', 75, 30, 450, 350);
+
+
+#data for SALESMAN_MASTER
+
+INSERT INTO SALESMAN_MASTER 
+( SALESMANNO , SALESMANNAME, ADDRESS1, ADDRESS2, CITY, PINCODE, STATE, SELLMT, TGTTOGET, YTDSALES, REMARKS)
+VALUES
+('S00001', 'Aman', 'A/14', 'Worli', 'Mumbai', 400002, 'Maharashtra', 3000, 100, 50, 'Good'),
+('S00002', 'Omkar', '65', 'Nariman', 'Mumbai', 400001, 'Maharashtra', 3000, 200, 100, 'Good'),
+('S00003', 'Raj', 'P-7', 'Bandra', 'Mumbai', 400032, 'Maharashtra', 2000, 200, 100, 'Good'),
+('S00004', 'Ashish', 'A/5', 'Juhu', 'Bombay', 400044, 'Maharashtra', 3500, 200, 150, 'Good');
+
+
+# data for SALES_ORDER
+
+INSERT INTO SALES_ORDER
+(ORDERNO, CLIENTNO, ORDERDATE, DELYDDR, SALESMANNO, DELYTYPE, BILLYN, DELYDATE, ORDERSTATUS)
+
+VALUES
+('O19003', 'C00001', '03-04-02', 'Delhi', 'S00001', 'F', 'Y', '07-04-02', 'Fulfilled'),
+('O46866', 'C00004', '20-05-02', 'Delhi', 'S00002', 'P', 'N', '22-05-02', 'Cancelled'),
+('O19008', 'C00005', '24-05-02', 'Delhi', 'S00003', 'F', 'N', '26-07-02', 'In Process'),
+('O19001', 'C00001', '12-06-02', 'Delhi', 'S00001', 'F', 'N', '20-07-02', 'In Process'),
+('O19002', 'C00002', '25-06-02', 'Delhi', 'S00002', 'P', 'N', '27-07-02', 'Cancelled'),
+('O46865', 'C00001', '2002-05-18', 'Delhi', 'S00001', 'F', 'Y', '2002-05-20', 'Fulfilled');
+
+
+
+#data for SALES_ORDER_DETAILS
+
+INSERT INTO SALES_ORDER_DETAILS
+(ORDERNO, PRODUCTNO, QTYORDERED, QTYDISP, PRODUCTRATE)
+VALUES
+('O19001', 'P00001', 4, 4, 525),
+('O19001', 'P07965', 2, 1, 8400),
+('O19001', 'P07885', 2, 1, 5250),
+('O19002', 'P00001', 10, 0, 525),
+('O46865', 'P07868', 4, 2, 3150),
+('O46865', 'P07885', 3, 1, 5250),
+('O46865', 'P00001', 10, 10, 525),
+('O46865', 'P03453', 2, 2, 1050),
+('O19003', 'P03453', 2, 2, 1050),
+('O19003', 'P06734', 4, 4, 12000),
+('O46866', 'P07965', 1, 1, 8400),
+('O46866', 'P07975', 1, 1, 1050),
+('O19008', 'P07975', 10, 5, 525),
+('O19008', 'P07975', 5, 3, 1050);
+
+
+
+
+
+
+# 3. Generate the SQL statements to perform the following computations on
+# table data in Python IDLE:
+
+# a. List the names of all clients having ‘a’ as the second letter in their names.
+
+
+
+import mysql.connector
+
+# Connect to MySQL
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    port = 3306,        # or your MySQL server IP
+    user="root",             # your MySQL username
+    password=".@.@pP5001707",# your MySQL password
+    database="lab"           # your database name
+)
+
+# Create a cursor
+cursor = conn.cursor()
+cursor.execute("SELECT *  FROM CLIENT_MASTER WHERE clientname LIKE '_a%';")
+for row in cursor.fetchall():
+    print(row)
+
+cursor.close()
+conn.close()
+
+
+
+# b. List the clients who stay in a city whose first letter is ‘M’.
+
+import mysql.connector
+
+# Connect to MySQL
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    port = 3306,        # or your MySQL server IP
+    user="root",             # your MySQL username
+    password=".@.@pP5001707",# your MySQL password
+    database="lab"           # your database name
+)
+
+# Create a cursor
+cursor = conn.cursor()
+cursor.execute("SELECT *  FROM CLIENT_MASTER WHERE city LIKE 'm%';")
+for row in cursor.fetchall():
+    print(row)
+
+cursor.close()
+conn.close()
+
+
+
+
+
+# c. List all clients who stay in ‘Bangalore’ or ‘Mangalore’.
+
+import mysql.connector
+
+# Connect to MySQL
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    port = 3306,        # or your MySQL server IP
+    user="root",             # your MySQL username
+    password=".@.@pP5001707",# your MySQL password
+    database="lab"           # your database name
+)
+
+# Create a cursor
+cursor = conn.cursor()
+cursor.execute("SELECT *  FROM CLIENT_MASTER WHERE city in ('Bangalore', 'Mangalore');")
+for row in cursor.fetchall():
+    print(row)
+
+cursor.close()
+conn.close()
+
+
+
+
+
+# d. List all clients whose BalDue is greater than value 10000.
+
+import mysql.connector
+
+# Connect to MySQL
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    port = 3306,        # or your MySQL server IP
+    user="root",             # your MySQL username
+    password=".@.@pP5001707",# your MySQL password
+    database="lab"           # your database name
+)
+
+# Create a cursor
+cursor = conn.cursor()
+cursor.execute("SELECT *  FROM CLIENT_MASTER WHERE  (baldue> 1000);")
+for row in cursor.fetchall():
+    print(row)
+
+cursor.close()
+conn.close()
+
+
+
+
+
+# e. List all information from the Sales_order table for order placed in the month of
+# June.
+
+
+import mysql.connector
+
+# Connect to MySQL
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    port = 3306,        # or your MySQL server IP
+    user="root",             # your MySQL username
+    password=".@.@pP5001707",# your MySQL password
+    database="lab"           # your database name
+)
+
+# Create a cursor
+cursor = conn.cursor()
+cursor.execute("SELECT *  FROM SALES_ORDER WHERE MONTH(ORDERDATE)= 6;")
+for row in cursor.fetchall():
+    print(row)
+
+cursor.close()
+conn.close()
+
+
+#f. List the Order No &amp; day on which clients placed their order.
+
+
+import mysql.connector
+
+# Connect to MySQL
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    port = 3306,        # or your MySQL server IP
+    user="root",             # your MySQL username
+    password=".@.@pP5001707",# your MySQL password
+    database="lab"           # your database name
+)
+
+# Create a cursor
+cursor = conn.cursor()
+cursor.execute("SELECT ORDERNO,DAY(ORDERDATE) FROM SALES_ORDER ;")
+for row in cursor.fetchall():
+    print(row)
+
+cursor.close()
+conn.close()
+
+
+
+# List the names, city and state of clients who are not in the state of ‘Maharashtra’.
+
+
+import mysql.connector
+
+# Connect to MySQL
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    port = 3306,        # or your MySQL server IP
+    user="root",             # your MySQL username
+    password=".@.@pP5001707",# your MySQL password
+    database="lab"           # your database name
+)
+
+# Create a cursor
+cursor = conn.cursor()
+cursor.execute("SELECT clientname,city, state from CLIENT_MASTER WHERE state != 'Maharashtra';")
+for row in cursor.fetchall():
+    print(row)
+
+cursor.close()
+conn.close()
+
+
+
+
+
+# 4. Exercises on Using Having, Group By and Joins in Python IDLE:
+# a. Printing the description and total quantity sold for each product.
+
+
+import mysql.connector
+
+# Connect to MySQL
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    port = 3306,        # or your MySQL server IP
+    user="root",             # your MySQL username
+    password=".@.@pP5001707",# your MySQL password
+    database="lab"           # your database name
+)
+
+# Create a cursor
+cursor = conn.cursor()
+cursor.execute("""SELECT PRODUCT_MASTER.Discription, sum(SALES_ORDER_DETAILS.QTYORDERED) as total_quantity_sold  
+                from PRODUCT_MASTER
+                inner join SALES_ORDER_DETAILS
+                on SALES_ORDER_DETAILS.PRODUCTNO =PRODUCT_MASTER.PRODUCTNO 
+                GROUP BY PRODUCT_MASTER.Discription;""")
+for row in cursor.fetchall():
+    print(row)
+
+cursor.close()
+conn.close()
+
+
+
+# b. Calculating the average quantity sold for each client that has a maximum order
+# value of 15000.00.
+
+
+import mysql.connector
+
+# Connect to MySQL
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    port = 3306,        # or your MySQL server IP
+    user="root",             # your MySQL username
+    password=".@.@pP5001707",# your MySQL password
+    database="lab"           # your database name
+)
+
+# Create a cursor
+cursor = conn.cursor()
+cursor.execute("""SELECT c.CLIENTNO, c.clientname, 
+       AVG(d.QTYORDERED) AS Avg_Qty_Sold
+FROM CLIENT_MASTER c
+JOIN SALES_ORDER s ON c.CLIENTNO = s.CLIENTNO
+JOIN SALES_ORDER_DETAILS d ON s.ORDERNO = d.ORDERNO
+GROUP BY c.CLIENTNO, c.clientname
+HAVING MAX(d.QTYORDERED * d.PRODUCTRATE) <= 15000;
+""")
+for row in cursor.fetchall():
+    print(row)
+
+cursor.close()
+conn.close()
+
+
