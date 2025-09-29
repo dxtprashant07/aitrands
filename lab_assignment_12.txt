@@ -1,0 +1,194 @@
+# # Follow the instructions to recreate the plots using this data:
+# # import numpy as np
+# # x = np.arange(0,100)
+# # y = x*2
+# # z = x**2
+
+
+Exercise 1
+** Follow along with these steps: **
+ ** Create a figure object called fig using plt.figure() **
+ ** Use add_axes to add an axis to the figure canvas at [0,0,1,1]. Call this new axis ax. **
+ ** Plot (x,y) on that axes and set the labels and titles to match the plot below:**
+** Now plot (x,y) on both axes. And call your figure object to show it.**
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+x = np.arange(0,100)
+y = x*2
+z = x**2
+fig =plt.figure()
+ax = fig.add_axes([0,0,1,1])
+ax.plot(x,y)
+plt.title("line plot")
+plt.figure()
+
+
+
+Exercise 2
+
+
+# # ** Create a figure object and put two axes on it, ax1 and ax2. Located at [0,0,1,1] and [0.2,0.5,.2,.2]
+# # respectively.**
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+x = np.arange(0,100)
+y = x*2
+z = x**2
+fig =plt.figure()
+ax = fig.add_axes([0,0,1,1])
+ax1 = fig.add_axes([0.2,0.5,0.2,0.2])
+
+ax.plot(x,y)
+plt.title("line plot")
+ax1.plot(x,y)
+plt.title("line plot")
+plt.figure()
+
+
+
+#Q2
+
+import numpy as np
+import matplotlib.pyplot as plt
+fig =plt.figure()
+ax = fig.add_axes([0,0,1,1])
+ax1 = fig.add_axes([0.2,0.5,0.4,0.4])
+plt.figure()
+
+
+
+
+
+
+#Q3
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.arange(0, 100)
+y = x * 2
+z = x ** 2
+
+# Step 1: Create a figure object
+fig = plt.figure()
+
+# Step 2: Add axes to the figure
+ax = fig.add_axes([0,0,1,1])
+ax1 = fig.add_axes([0.2,0.5,0.4,0.4])  # [left, bottom, width, height]
+  # Plot some data on the Axes.
+ax.plot(x, z)
+ax.set_xlabel("x")
+ax.set_label("y")
+# Step 3: Plot (x, y) on the axes
+
+ax1.set_xlim(20,22.0)
+ax1.set_ylim(30,50)
+ax1.plot( y , label='linier')
+
+# Step 4: Show the figure
+plt.figure()
+
+
+
+
+#Q4
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+fig =plt.figure()
+x = np.arange(0,100)
+y = x*2
+z = x**2
+
+fig,axes=plt.subplots(nrows=1,ncols=2)
+
+
+#Q4
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+fig =plt.figure()
+x = np.arange(0,100)
+y = x*2
+z = x**2
+fig,pranav=plt.subplots(nrows=1,ncols=2)
+pranav[0].plot(x,y,linewidth = 2, linestyle = "--")
+pranav[0].set_title("first plott")
+
+pranav[1].plot(x,z,linewidth = 2,color = "red")
+pranav[1].set_title("first plott")
+
+
+
+#Q4
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+fig =plt.figure()
+x = np.arange(0,100)
+y = x*2
+z = x**2
+fig,pranav=plt.subplots(nrows=1,ncols=2,figsize = (15,2))
+pranav[0].plot(x,y,linewidth = 6 )
+pranav[0].set_title("first plott")
+
+pranav[1].plot(x,z,linewidth = 2,color = "red",linestyle = "--")
+pranav[1].set_title("first plott")
+
+
+
+
+
+
+
+#seaborn
+
+
+** Recreate the plots below using the titanic dataframe. There are very few hints since most of the
+plots can be done with just one or two lines of code and a hint would basically give away the
+solution. Keep careful attention to the x and y labels for hints.**
+** Note! In order to not lose the plot image, make sure you don&#39;t code in the cell that is directly above
+the plot, there is an extra cell above that one which won&#39;t overwrite that plot! **
+
+#Q1
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+%matplotlib inline
+sns.set_style('whitegrid')
+titanic = sns.load_dataset("titanic")
+titanic.head()
+
+
+
+#Q2
+
+
+titanic = sns.load_dataset("titanic")
+sns.displot(titanic, x="fare",color="red")
+
+
+#Q3
+
+
+
+sns.set_style("whitegrid")
+sns.boxplot(x="class", y="age", data=titanic, palette="deep")
+sns.despine(left=True)
+plt.show()
+
+
+
+
+
+
+titanic = sns.load_dataset("titanic")
+sns.displot(titanic, x="sex", color="red", hue="sex",shrink= 0.7,palette = "dark")
